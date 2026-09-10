@@ -29,8 +29,12 @@ app.add_middleware(
 app.include_router(api_router)
 
 # Mount frontend dist static files if built
-frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
-if os.path.exists(frontend_dist):
+frontend_dist_1 = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+frontend_dist_2 = os.path.join(os.path.dirname(__file__), "frontend", "dist")
+frontend_dist_3 = os.path.join(os.getcwd(), "frontend", "dist")
+frontend_dist = next((d for d in [frontend_dist_1, frontend_dist_2, frontend_dist_3] if os.path.exists(d)), None)
+
+if frontend_dist:
     app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
 
 # Initialize database on startup
